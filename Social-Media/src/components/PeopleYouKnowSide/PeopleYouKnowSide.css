@@ -1,0 +1,7 @@
+.PeopleYouKnowSide {
+    width: 300px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}

@@ -1,0 +1,132 @@
+.main {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+ 
+}
+
+video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index:-1; 
+}
+
+.LoginPage {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 1.2s ease-in-out;
+  color: #f0f0f0; 
+}
+
+.Header {
+  margin-bottom: 20px;
+  color: #00c8ff; 
+  position: absolute;
+  top: 10%;
+}
+
+.img {
+  margin-top: 10px;
+  width: 100px;
+  height: auto;
+  border-radius: 50%;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6); 
+  transition:  0.5s ease;
+}
+.img:hover {
+  transform: rotate(360deg);
+}
+
+.LoginWindow {
+  background: rgba(20, 20, 30, 0.95); 
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6);
+  width: 300px;
+  text-align: center;
+  animation: slideIn 1s ease forwards;
+  opacity: 0;
+}
+
+.LoginInput {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-bottom: 2px solid #444; 
+  font-size: 16px;
+  background-color: #1b1b2f; 
+  color: #f0f0f0; 
+  transition: all 0.3s ease;
+}
+.LoginInput:focus {
+  border-color: #00c8ff;
+  background-color: #222;
+  outline: none;
+  transform: scale(1.02);
+}
+
+.LoginButton {
+  background: linear-gradient(135deg, #00c8ff, #4b0082); 
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.4s ease, transform 0.3s ease;
+  width: 100%;
+}
+.LoginButton:hover {
+  background: linear-gradient(135deg, #4b0082, #00c8ff); 
+  transform: scale(1.05);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.CreateAccount {
+  background: none;
+  color: #00c8ff; 
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+  transition: color 0.3s ease;
+}
+.CreateAccount:hover {
+  color: #4b0082; 
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.logo{
+   margin-top: 10px;
+}

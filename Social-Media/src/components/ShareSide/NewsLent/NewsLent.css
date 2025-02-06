@@ -1,0 +1,54 @@
+.newsLent{
+    width: 100%;
+    min-height: 450px;
+    padding-block: 20px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-color: #EEF2F5;
+}
+.news{
+    width: 90%;
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.UserName{
+    display: inline-flex;
+    gap: 5px;
+    font-size: 12px;
+    margin-bottom: 15px;
+    img{
+        width: 50px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+    }
+    
+}
+.PostItem{
+    p{
+        text-align: left;
+        padding-left: 20px;
+    }
+}
+.UserNameButton{
+    display: flex;
+    align-items: center;
+    padding-left: 230px;
+    gap: 15px;
+    
+    i{
+        cursor: pointer;
+        font-size: 20px;
+        
+    }
+}
+.EditPostInput{
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+}

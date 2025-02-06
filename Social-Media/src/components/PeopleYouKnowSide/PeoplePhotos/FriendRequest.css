@@ -1,0 +1,24 @@
+.FriendRequest {
+    padding: 10px;
+    width: 100%;
+    min-height: 300px;
+    gap: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    h2{
+        text-align: center;
+    }
+    background-color: #EEF2F5;
+
+}
+.FriendRequestBody{
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    span{
+        color: red;
+        font-size: 20px;
+    }
+}

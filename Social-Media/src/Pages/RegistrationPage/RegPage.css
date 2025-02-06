@@ -1,0 +1,233 @@
+.RegPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 1.2s ease-in-out;
+}
+video {
+  width: 100%;
+  min-height: 115vh;
+}
+.RegHeader {
+  margin-bottom: 20px;
+  color: #00c8ff;
+  position: absolute;
+  border-radius: 50%;
+
+  img {
+    margin-top: 50px;
+    width: 150px;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.6);
+    transition: 0.5s ease;
+  }
+  img:hover {
+    transform: rotate(360deg);
+  }
+}
+
+span {
+  font-family: serif;
+}
+
+.RegWindow {
+  background: rgba(20, 20, 30, 0.95);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6);
+  width: 350px;
+  text-align: center;
+  animation: bounceIn 1s ease forwards, glowPulse 2.5s ease-in-out infinite;
+  opacity: 0;
+  position: absolute;
+  top: 30%;
+
+  p {
+    font-family: serif;
+    color: #00c8ff;
+  }
+}
+
+.RegInput {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-bottom: 2px solid #444;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #1b1b2f;
+  color: #f0f0f0;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+}
+.RegInput:focus {
+  border-color: #00c8ff;
+  background-color: #222;
+  outline: none;
+  transform: scale(1.02);
+}
+
+.mydict label {
+  display: inline-flex;
+  align-items: center;
+  margin: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  gap: 5px;
+}
+.mydict span {
+  font-size: 16px;
+  color: #f0f0f0;
+  transition: color 0.3s ease;
+  font-size: 18px;
+}
+.mydict input[type="radio"]:checked + span {
+  color: #00c8ff;
+  font-weight: bold;
+}
+.overplay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 115vh;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.RegButton {
+  background: linear-gradient(135deg, #00c8ff, #4b0082);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.4s ease, transform 0.3s ease;
+  width: 100%;
+  position: relative;
+}
+.RegButton:hover {
+  background: linear-gradient(135deg, #4b0082, #00c8ff);
+  transform: scale(1.05);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.RegButton:hover::before,
+.RegButton:hover::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+  background: #00c8ff;
+  animation: clockwise 1s infinite;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+.RegButton:hover::after {
+  background: #4b0082;
+  animation: counterclockwise 2s infinite;
+}
+
+.RegWindow p {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #f0f0f0;
+}
+input::placeholder {
+  font-family: "Courier New", Courier, monospace;
+}
+.RegWindow a {
+  color: #00c8ff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+.RegWindow a:hover {
+  color: #4b0082;
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.9) translateY(30px);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1) translateY(-15px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: 0px 0px 20px rgba(0, 200, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0px 0px 35px rgba(75, 0, 130, 0.6);
+  }
+}
+
+@keyframes clockwise {
+  0% {
+    top: -5px;
+    left: 0;
+  }
+  25% {
+    top: 0;
+    left: 5px;
+  }
+  50% {
+    top: 5px;
+    left: 0;
+  }
+  75% {
+    top: 0;
+    left: -5px;
+  }
+  100% {
+    top: -5px;
+    left: 0;
+  }
+}
+
+@keyframes counterclockwise {
+  0% {
+    top: -5px;
+    right: 0;
+  }
+  25% {
+    top: 0;
+    right: 5px;
+  }
+  50% {
+    top: 5px;
+    right: 0;
+  }
+  75% {
+    top: 0;
+    right: -5px;
+  }
+  100% {
+    top: -5px;
+    right: 0;
+  }
+}

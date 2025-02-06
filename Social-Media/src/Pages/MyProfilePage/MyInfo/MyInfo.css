@@ -1,0 +1,34 @@
+.MyInfo {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    background-color: #1D3039;
+    padding-inline: 100px;
+    border-bottom: 1px solid gray;
+    img {
+        width: 180px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+
+    }
+}
+
+.AllInfo{
+    display: flex;
+    gap: 15px;
+
+    div {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        gap: 5px;
+
+        p {
+            color: white;
+            font-size: 24px;
+        }
+        span {
+            color: gray;
+        }
+    }
+}
