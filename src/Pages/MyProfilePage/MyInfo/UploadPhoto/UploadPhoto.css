@@ -1,0 +1,89 @@
+.MyPhotos {
+  width: 400px;
+  min-height: 200px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 10px;
+  img {
+    width: 100px;
+    aspect-ratio: 1;
+    border-radius: 12px;
+  }
+}
+
+.UploadPhoto {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.Selected-Photo {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 25px;
+  position: absolute;
+  backdrop-filter: blur(5px);
+}
+
+.Selected-Image {
+  background: #00b4db; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #0083b0,
+    #00b4db
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #0083b0,
+    #00b4db
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  top: 5%;
+  flex-direction: column;
+  position: absolute;
+  width: 800px;
+  height: 600px;
+  border: 1px solid black;
+  gap: 15px;
+
+  button {
+    width: 100px;
+    height: 40px;
+    margin-bottom: 25px;
+    cursor: pointer;
+  }
+
+  img {
+    width: 400px;
+    aspect-ratio: 1;
+  }
+
+  div {
+    width: 100%;
+    text-align: end;
+
+    i {
+        cursor: pointer;
+    }
+  }
+}
+
+.Selected-Image-Buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}

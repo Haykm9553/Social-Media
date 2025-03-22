@@ -1,0 +1,49 @@
+.SharedPost {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  padding-block: 15px;
+  font-size: 14px;
+}
+.SharePostBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  textarea {
+    width: 550px;
+    min-height: 130px;
+    border-radius: 12px;
+    resize: none;
+    overflow-y: auto;
+    padding: 20px;
+    font-size: 18px;
+  }
+  form{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 15px;
+      button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 30px;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #0073b1;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+  }
+}
+
+
+

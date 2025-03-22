@@ -1,0 +1,38 @@
+.ThirdHeader {
+    width: 600px;
+    min-height: 100vh;
+    position: absolute;
+  }
+  
+  .MovingThirddDiv {
+    border: 1px solid black;
+    position: absolute;
+    right: 85%;
+    top: 10%;
+    width: 600px;
+    height: 600px;
+    background: #34e89e; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+      to left,
+      #0f3443,
+      #34e89e
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to left,
+      #0f3443,
+      #34e89e
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    border: 1px solid black;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    button {
+      width: 200px;
+      height: 40px;
+    }
+  }
+  
