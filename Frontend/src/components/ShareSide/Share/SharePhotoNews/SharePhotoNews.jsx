@@ -16,7 +16,7 @@ const SharePhotoNews = () => {
             setShowImage(reader.result)
         }
     }
-    const FindImage = Loged_User_Data[0]?.Photo?.map((el) => {
+    const FindImage = profile?.Photo?.map((el) => {
         if(el.key){
           return el.url
         } else {
@@ -31,10 +31,10 @@ const SharePhotoNews = () => {
             post: description.value,
             isEditing: false,
             imgSRC: showImage,
-            FirstName: Loged_User_Data[0].FirstName,
-            LastName: Loged_User_Data[0].LastName,
-            Image: FindImage.length !== 0 ? FindImage : Loged_User_Data[0].Image,
-            userId: Loged_User_Data[0]?.id
+            FirstName: profile.FirstName,
+            LastName: profile.LastName,
+            Image: FindImage.length !== 0 ? FindImage : profile.Image,
+            userId: profile?.id
         })
         await fetch("http://localhost:3005/News_Lent",{
             method: "POST",

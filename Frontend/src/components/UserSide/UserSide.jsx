@@ -2,9 +2,9 @@ import ProfileViews from './ProfileViews/ProfileViews'
 import UserInfo from './UserInfo/UserInfo'
 import './UserSide.css'
 
-const UserSide = ({ User_Data, Loged_User_Data }) => (
+const UserSide = ({ profile }) => (
   <section className="UserSide">
-    <UserInfo User_Data={User_Data} Loged_User_Data={Loged_User_Data} />
+    <UserInfo profile={profile} />
     <ProfileViews />
   </section>
 );

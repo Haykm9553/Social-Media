@@ -1,144 +1,98 @@
 import { useDispatch, useSelector } from "react-redux";
 import "./UploadPhoto.css";
-import {
-  AddNewPhoto,
-  deletePhoto,
-  selectPhoto,
-  SelectPhotoToMain,
-  selectUser,
-} from "../../../../store/slices/UserSlice";
-import { useEffect, useState } from "react";
-import CrossLogo from "../../../../SVG/CrossLogo";
+import { AddNewPhoto, selectPhoto, selectUser } from "../../../../store/slices/UserSlice";
+
+
 const UploadPhoto = () => {
   const dispatch = useDispatch();
-  const [uploadedPhoto, setUploadedPhoto] = useState(null);
-  const [key, setKey] = useState(false);
-  const { User_Data, Loged_User_Data } = useSelector(selectUser);
-  const handlePhotoUpload = (event) => {
+  const {profile} = useSelector(selectUser)
+  const token = localStorage.getItem('token')
+  
+
+  const handleFileUpload = async (event) => {
     const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      setUploadedPhoto(reader.result);
-    };
-  };
+    const formData = new FormData();
+    formData.append("photo", file);
 
+    try {
+      const response = await fetch("http://localhost:8000/api/upload-photo", {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+        method: "POST",
+        body: formData,
+      });
 
-  useEffect(() => {
-    fetch(`http://localhost:3005/Loged_User/${Loged_User_Data[0].id}`, {
-      method: "PUT",
-      body: JSON.stringify(Loged_User_Data[0]),
-    });
-  }, [key]);
+      const data = await response.json();
 
-  const HandlerAddNewPhoto = async () => {
-    if (uploadedPhoto !== null) {
-      dispatch(AddNewPhoto({ key: false, url: uploadedPhoto, active: false }));
-      const newresult = {
-        ...Loged_User_Data[0],
-        Photo: [
-          ...Loged_User_Data[0].Photo,
-          { key: false, url: uploadedPhoto, active: false },
-        ],
-      };
-      const endRes = await fetch(
-        `http://localhost:3005/Loged_User/${Loged_User_Data[0].id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(newresult),
+      if (response.ok) {
+        const newPhoto = { url: `http://localhost:8000${data.url}`, key: false, active: true };
+        dispatch(AddNewPhoto(newPhoto))
+        const updatedProfile = {
+          ...profile,
+          photo: [...(profile.photo || []), newPhoto],
+        };
+
+        if (profile?.id) {
+          await fetch(`http://localhost:8000/api/users/${profile.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json","Authorization": `Bearer ${token}`, },
+            body: JSON.stringify(updatedProfile),
+          });
+        } else {
+          console.warn("⚠️ Нет ID профиля. PATCH запрос не отправлен.");
         }
-      );
-      return endRes;
-    } else {
-      alert("Please Select Photo");
+
+        dispatch(selectPhoto(updatedProfile.photo.length - 1));
+      }
+    } catch (error) {
+      console.error("Ошибка при загрузке:", error);
     }
   };
-  const handlerDeletePhoto = async(index) => { 
-    
 
-    
-    const newresult = {
-      ...Loged_User_Data[0],
-      Photo: Loged_User_Data[0].Photo.filter((el,indexEl) => index != indexEl)
-      
+  const handleDeletePhoto = async (index) => {
+    const newPhotos = profile.photo.filter((_, i) => i !== index);
+
+    const updatedProfile = {
+      ...profile,
+      photo: newPhotos,
     };
-      const endRes = await fetch(
-        `http://localhost:3005/Loged_User/${Loged_User_Data[0].id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(newresult),
-        }
-      );
-      return endRes;
-  }
 
-
+    await fetch(`http://localhost:8000/api/users/${profile.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json","Authorization": `Bearer ${token}`, },
+      body: JSON.stringify(updatedProfile),
+    });
+  };
+  console.log(profile);
+  
   return (
     <div className="UploadPhoto">
-      {Loged_User_Data[0]?.Photo?.map((el, index) => {
-        if (el.active) {
-          return (
-            <header className="Selected-Photo">
-              <div className="Selected-Image">
-                <div>
-                  <i onClick={() => dispatch(selectPhoto(index))}>
-                    <CrossLogo />
-                  </i>
-                </div>
-                <img src={el.url} alt="photo" />
-                <div className="Selected-Image-Buttons" key={index}>
-                  <button
-                    onClick={() => {
-                      dispatch(deletePhoto(index)) 
-                      handlerDeletePhoto(index)
-                    }}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => {
-                      dispatch(SelectPhotoToMain(index));
-                      setKey(true);
-                    }}
-                  >
-                    Add As Main Photo
-                  </button>
-                </div>
-              </div>
-            </header>
-          );
-        }
-      })}
-      <div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.target.reset();
-          }}
-        >
-          <input
-            type="file"
-            name="myImage"
-            onChange={(event) => handlePhotoUpload(event)}
-          />
-          <button onClick={HandlerAddNewPhoto}>Upload</button>
-        </form>
-      </div>
-      <div className="MyPhotos">
-        {Loged_User_Data[0].Photo.length === 0 ? (
+      <h2>Your Photos</h2>
+
+      <div className="photo-gallery">
+        {profile?.photo?.length === 0 ? (
           <p>No Photos</p>
         ) : (
-          Loged_User_Data[0].Photo.map((photo, index) => {
-            return (
-              <img
-                onClick={() => dispatch(selectPhoto(index))}
-                src={photo.url}
-                alt="photo"
-                key={index}
-              />
-            );
-          })
+          profile?.photo?.map((photo, index) => (
+            <div className="photo-item" key={index}>
+              <img src={photo.url} alt="UserPhoto" />
+              <div className="photo-actions">
+                <button onClick={() => dispatch(selectPhoto(index))}>
+                  Select
+                </button>
+                <button onClick={() => handleDeletePhoto(index)}>
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))
         )}
+      </div>
+
+      <div className="upload-form">
+        <input type="file" onChange={handleFileUpload} />
+        <button>Upload</button>
       </div>
     </div>
   );

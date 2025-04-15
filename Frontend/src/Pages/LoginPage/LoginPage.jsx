@@ -1,22 +1,27 @@
-import React, { useEffect } from "react";
+
 import "./LoginPage.css";
 import Logo from "../../components/Img/Logo.jpeg";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { LogIn, selectUser } from "../../store/slices/UserSlice";
+import { useDispatch} from "react-redux";
+import { LogIn } from "../../store/slices/UserSlice";
 import main from "../../components/Img/main.mp4";
+import { useEffect } from "react";
 const LoginPage = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch()
+  const user = JSON.parse(localStorage.getItem("userProfile"))
 
+  
+
+  
   const handlerSubmit = async (e) => {
     e.preventDefault();
     const [Login, Password] = e.target;
   
     const credentials = {
       login: Login.value,
-      pass: Password.value,
+      password: Password.value,
     };
   
     try {
@@ -24,20 +29,23 @@ const LoginPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Accept: 'application/json',
+          
         },
         body: JSON.stringify(credentials),
+        
       });
   
       const text = await res.text(); 
   
-      console.log("Raw response:", text);
+     
   
       let data = {};
       try {
         data = JSON.parse(text); 
       } catch (error) {
-        console.error("Ошибка парсинга JSON:", error);
-        alert("Сервер вернул невалидный JSON");
+        console.error("ERROR PARSING JSON:", error);
+        alert("Invalid JSON");
         return;
       }
      
@@ -57,7 +65,12 @@ const LoginPage = () => {
   
     e.target.reset();
   };
-
+  const token = localStorage.getItem("token")
+  useEffect(() => {
+    if (token) {
+      navigate("/profile");
+    }
+  }, [token, navigate]);
 
   return (
     <div className="main">
@@ -70,8 +83,9 @@ const LoginPage = () => {
         </div>
         <div className="LoginWindow">
           <form onSubmit={(e) => handlerSubmit(e)}>
-            <input className="LoginInput" type="text" placeholder="Login" />
+            <input className="LoginInput" type="text" placeholder="Login" name="login" />
             <input
+            name="password"
               className="LoginInput"
               type="password"
               placeholder="Password"

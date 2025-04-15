@@ -1,36 +1,38 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Layout from '../Layout/Layout'
 import ProfilePage from '../Pages/ProfilePage/ProfilePage'
 import RegPage from '../Pages/RegistrationPage/RegPage'
 import LoginPage from '../Pages/LoginPage/LoginPage'
-import MyProfilePage from '../Pages/MyProfilePage/MyProfilePage'
-import { useDispatch, useSelector } from 'react-redux'
+import {  useSelector } from 'react-redux'
 import { selectUser } from '../store/slices/UserSlice'
-import { fetchGetLogedUser, fetchGetNewsLent, fetchGetUser } from '../store/slices/API'
 import ProjectPage from '../Pages/ProjectPage/ProjectPage'
+import AboutMeEdit from '../Pages/MyProfilePage/MyInfo/AboutMe/AboutMeEdit/AboutMeEdit'
+import MyProfileLayout from '../Layout/MyProfileLayout'
+import AboutMe from '../Pages/MyProfilePage/MyInfo/AboutMe/AboutMe'
+import MyFriends from '../Pages/MyProfilePage/MyInfo/MyFriends/MyFriends'
+import UploadPhoto from '../Pages/MyProfilePage/MyInfo/UploadPhoto/UploadPhoto'
 
 const AppRouter = () => {
 
-    const dispatch = useDispatch()
-    const {User_Data,Loged_User_Data } = useSelector(selectUser)
-    console.log(User_Data);
+    const { profile,users } = useSelector(selectUser);
+    console.log(users);
     
-    useEffect(() => {
-        dispatch(fetchGetLogedUser())
-        dispatch(fetchGetUser())
-        dispatch(fetchGetNewsLent())
-    },[])
-
     return (
         <Routes>
-            <Route path='/' element={<RegPage User_Data={User_Data} Loged_User_Data={Loged_User_Data}/>}/>
-            <Route path='/Login' element={<LoginPage User_Data={User_Data} Loged_User_Data={Loged_User_Data}/>}/>
-            <Route path='/profile' element={<Layout User_Data={User_Data} Loged_User_Data={Loged_User_Data}/>} >
-                <Route path='/profile/Pages' element={<ProjectPage />}/>
-                <Route path='/profile' element={<ProfilePage User_Data={User_Data} Loged_User_Data={Loged_User_Data}/>}/>
-                <Route path="/profile/:id" element={<MyProfilePage User_Data={User_Data} Loged_User_Data={Loged_User_Data}/>}/>
+            <Route path='/' element={<RegPage users={users} profile={profile}/>}/>
+            <Route path='/Login' element={<LoginPage />}/>
+            <Route path='/profile' element={<Layout />} >
+                <Route path='/profile/pages' element={<ProjectPage />}/>
+                <Route index element={<ProfilePage />}/>
+                <Route path="/profile/:id/edit" element={<AboutMeEdit profile={profile} />}/>
                 
+            </Route>
+            <Route path='/profile/:id' element={<MyProfileLayout/>}>
+            <Route path='info' element={<AboutMe/>}/>
+            <Route path='friends' element={<MyFriends/>}/>
+            <Route path='photo' element={<UploadPhoto/>}/>
+            <Route path='info/edit' element={<AboutMeEdit/>}/>
             </Route>
 
         </Routes>

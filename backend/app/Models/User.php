@@ -1,22 +1,34 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Model
+class User extends Authenticatable
 {
     use HasApiTokens;
     protected $casts = [
-        'friend_request' => 'array',
-        'friend_list' => 'array',
         'photo' => 'array',
+        'friend_list' => 'array',
+        'friend_request' => 'array',
     ];
     protected $fillable = [
-        'first_name', 'last_name', 'login', 'password',
-        'age', 'gender', 'location', 'bio', 'profession',
-        'hobbies', 'friend_request', 'friend_list', 'image', 'photo'
+        'first_name',
+        'last_name',
+        'login',
+        'age',
+        'password',
+        'gender',
+        'location',
+        'bio',
+        'profession',
+        'hobbies',
+        'is_editing',
+        'friend_request',
+        'friend_list',
+        'image',
+        'photo',
     ];
     protected $visible = [
         'id',

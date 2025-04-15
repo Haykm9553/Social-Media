@@ -24,10 +24,10 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->string('profession')->nullable();
             $table->string('hobbies')->nullable();
-            $table->text('friend_request')->nullable();
-            $table->text('friend_list')->nullable();
+            $table->json('friend_request')->nullable();
+            $table->json('friend_list')->nullable();
             $table->string('image');
-            $table->text('photo')->nullable();
+            $table->json('photo')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

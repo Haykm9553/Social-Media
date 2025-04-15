@@ -15,7 +15,7 @@ const NewsLent = () => {
   const dispatch = useDispatch();
   const news = useSelector(selectNews);
   const { Loged_User_Data } = useSelector(selectUser);
-  // const FindImage = Loged_User_Data[0]?.Photo.map((el) => {
+  // const FindImage = profile?.Photo.map((el) => {
   //   if(el.key){
   //     return el.url
   //   } else {
@@ -36,7 +36,7 @@ export default NewsLent;
 //       return (
 //           <div key={el.id} className="news">
 //             <div className="UserName">
-//               {/* <img src={FindImage.length !== 0 ? FindImage : Loged_User_Data[0].Image} alt="Icon" /> */}
+//               {/* <img src={FindImage.length !== 0 ? FindImage : profile.Image} alt="Icon" /> */}
 //               <h2>{el.FirstName}</h2>
 //               <h2>{el.LastName}</h2>
 //             </div>
@@ -59,7 +59,7 @@ export default NewsLent;
 //           <img src={el.Image} alt="Icon" />
 //           <h2>{el?.FirstName}</h2>
 //           <h2>{el?.LastName}</h2>
-//           {el?.userId===Loged_User_Data[0]?.id ? <div className="UserNameButton">
+//           {el?.userId===profile?.id ? <div className="UserNameButton">
 //             <button
 //               onClick={() => {
 //                 dispatch(EditableStatus({ id: el?.id }));

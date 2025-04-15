@@ -6,15 +6,16 @@ import main from "../../components/Img/main.mp4";
 import { useDispatch } from "react-redux";
 import { RegUser } from "../../store/slices/UserSlice";
 
-const RegPage = ({User_Data,Loged_User_Data}) => {
+const RegPage = ({profile,users}) => {
   const [value,setValue] = useState("")
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  
-    if (Loged_User_Data.length !== 0) {
-      navigate("/profile");
-    } 
 
+  const user = JSON.parse(localStorage.getItem("userProfile"))
+
+  if(user){
+    navigate("/profile")
+  }
 
   const HandlerSubmit = async (e) => {
     e.preventDefault();
@@ -33,13 +34,13 @@ const RegPage = ({User_Data,Loged_User_Data}) => {
       is_editing: false,
       friend_request: [],   
       friend_list: [],
-      image:value === "Man" ? "https://ecofishresearch.com/wp-content/uploads/2022/03/690-6904538_men-profile-icon-png-image-free-download-searchpng.png" : "https://st2.depositphotos.com/3250055/8394/v/450/depositphotos_83944630-stock-illustration-female-avatar-profile-picture.jpg", 
-      Photo: [
+      image:value === "Man" ? "http://localhost:8000/storage/Image/Man-Photo.webp" : "http://localhost:8000/storage/Image/Woman-Photo.png", 
+      photo: [
       ],
     };
 
     if (Pass.value === RepeatPass.value) {
-      if (User_Data.find((el) => el.Login === Login.value)) {
+      if (users.find((el) => el.Login === Login.value)) {
         alert("User Already Exists");
       } else {
         await fetch("http://localhost:8000/api/register", {
@@ -50,7 +51,7 @@ const RegPage = ({User_Data,Loged_User_Data}) => {
           body: JSON.stringify(newUser),
         });
         dispatch(RegUser(newUser))
-        navigate("/Login");
+         navigate("/Login");
       }
     } else alert("Wrong Password");
 
@@ -110,7 +111,7 @@ const RegPage = ({User_Data,Loged_User_Data}) => {
             type="password"
             placeholder="Repeat Password..."
           />
-          <div class="mydict">
+          <div className="mydict">
             <div>
               <label >
                 <input type="radio" name="radio"  value={"Man"} onChange={(e) => {checkedGender(e) }}/>

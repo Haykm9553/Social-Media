@@ -2,10 +2,10 @@ import React from 'react'
 import NavBar from '../components/NavBar/NavBar'
 import { Outlet } from 'react-router-dom'
 
-const Layout = () => {
+const Layout = ({profile}) => {
     return (
         <div className='App'>
-            <NavBar/>
+            <NavBar profile={profile}/>
             <Outlet/>
         </div>
     )

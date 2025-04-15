@@ -7,23 +7,28 @@ import { LogOut, selectUser } from "../../store/slices/UserSlice";
 import { NavLink, useNavigate } from "react-router-dom";
 const NavBar = () => {
   const navigate = useNavigate();
-  const {User_Data, Loged_User_Data } = useSelector(selectUser);
+  const {profile} = useSelector(selectUser);
   const dispatch = useDispatch();
-
+  
   const logOut = () => {
-    fetch(`http://localhost:3005/users_Data/${Loged_User_Data[0]?.id}`, {
-      method: "PUT",
-      body: JSON.stringify(Loged_User_Data[0]),
-    });
 
-    fetch(`http://localhost:3005/Loged_User/${Loged_User_Data[0].id}`, {
-      method: "DELETE",
-    });
-    dispatch(LogOut());
-    navigate("/Login");
+    const token = localStorage.getItem("token")
+    fetch('http://localhost:8000/api/logout', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data); 
+        
+      });
+      dispatch(LogOut())
+      navigate("/Login")
   };
-
-  const FindImage = Loged_User_Data[0]?.Photo?.map((el) => {
+  
+  const FindImage = profile?.Photo?.map((el) => {
     if(el.key){
       return el.url
     } else {
@@ -37,7 +42,7 @@ const NavBar = () => {
           src={Logo}
           alt="Logo"
           onClick={() => {
-            if (Loged_User_Data.length === 0) {
+            if (profile.length === 0) {
               navigate("/Login");
             } else {
               navigate("/profile");
@@ -49,7 +54,7 @@ const NavBar = () => {
       <div className="JobSide">
         <ul>
 
-          <li><NavLink to={"Pages"}>Pages</NavLink></li>
+          <li><NavLink to={"/profile/pages"}>Pages</NavLink></li>
           <li>
             <ChatLogo />
           </li>
@@ -57,7 +62,7 @@ const NavBar = () => {
             <NotificationLogo />
           </li>
           <li>
-            <img src={User_Data[0]?.image} alt="" />
+            <img src={profile?.image} alt="" />
           </li>
          
           <li className="LogOut" onClick={logOut}>

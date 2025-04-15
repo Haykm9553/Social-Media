@@ -97,7 +97,7 @@ const SecondTable = () => {
                     onClick={() => {
                       dispatch(changeSecondUser(index));
                       dispatch(addToPopedUser(user));
-                      console.log(PopedUser);
+                      
                       
                       
                       setActive(true);
