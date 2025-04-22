@@ -2,15 +2,15 @@ import '../AboutMeEdit/AboutMeEdit.css'
 import { useDispatch } from 'react-redux'
 import { editedProfile } from '../../../../../store/slices/UserSlice'
 import { useNavigate } from 'react-router-dom';
+import { getToken } from '../../../../../utils/auth';
 
 export default function AboutMeEdit() {
 
-  const profile = JSON.parse(localStorage.getItem("userProfile"))
-  console.log(profile);
+  const profile = JSON.parse(localStorage.getItem("userProfile") || sessionStorage.getItem("userProfile"))
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const handlerSubmit = async (e) => {
-    const token = localStorage.getItem("token")
+    const token = getToken()
         e.preventDefault()
         const [FirstName,LastName,Age,Bio,Location,Profession,Hobbies] = e.target
         const newUser = {

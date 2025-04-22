@@ -5,6 +5,7 @@ import Logo from "../Img/Logo.jpeg";
 import { useDispatch, useSelector } from "react-redux";
 import { LogOut, selectUser } from "../../store/slices/UserSlice";
 import { NavLink, useNavigate } from "react-router-dom";
+import { getToken } from "../../utils/auth";
 const NavBar = () => {
   const navigate = useNavigate();
   const {profile} = useSelector(selectUser);
@@ -12,7 +13,7 @@ const NavBar = () => {
   
   const logOut = () => {
 
-    const token = localStorage.getItem("token")
+    const token = getToken()
     fetch('http://localhost:8000/api/logout', {
       method: 'POST',
       headers: {
@@ -21,7 +22,7 @@ const NavBar = () => {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data); 
+         
         
       });
       dispatch(LogOut())
@@ -61,7 +62,7 @@ const NavBar = () => {
           <li>
             <NotificationLogo />
           </li>
-          <li>
+          <li className="liImg">
             <img src={profile?.image} alt="" />
           </li>
          

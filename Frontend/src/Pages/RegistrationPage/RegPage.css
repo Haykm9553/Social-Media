@@ -93,7 +93,7 @@ span {
   left: 0;
   width: 100%;
   min-height: 115vh;
-  background-color: rgba(0, 0, 0, 0.4);
+
 }
 
 .RegButton {
@@ -230,4 +230,10 @@ input::placeholder {
     top: -5px;
     right: 0;
   }
+}
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  display: block;
 }

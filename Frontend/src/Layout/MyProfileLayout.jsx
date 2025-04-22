@@ -7,7 +7,7 @@ import { setActiveSection } from '../store/slices/SectionSlice/SectionSlice';
 
 export default function MyProfileLayout() {
   const { id } = useParams(); 
-const profile = JSON.parse(localStorage.getItem("userProfile"))
+const profile = JSON.parse(localStorage.getItem("userProfile") || sessionStorage.getItem("userProfile"))
 
 
 
@@ -29,7 +29,7 @@ const profile = JSON.parse(localStorage.getItem("userProfile"))
     <div className="MyProfilePage">
      {
             <div key={profile?.id}> 
-              <div style={{ marginBottom: "20px" }}>
+              <div style={{ marginBottom: "20px", marginTop:"65px" }}>
             <img
               src={profile?.image}
               style={{

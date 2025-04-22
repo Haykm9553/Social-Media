@@ -18,7 +18,8 @@
 }
 
 .UserName{
-    display: inline-flex;
+    display: flex;
+    justify-content: space-between;
     gap: 5px;
     font-size: 12px;
     margin-bottom: 15px;
@@ -38,7 +39,7 @@
 .UserNameButton{
     display: flex;
     align-items: center;
-    padding-left: 230px;
+    justify-content: space-between;
     gap: 15px;
     
     i{
@@ -51,4 +52,8 @@
     width: 100%;
     padding: 10px;
     border-radius: 12px;
+}
+.UserNameAvatar {
+    display: flex;
+    gap: 20px;
 }

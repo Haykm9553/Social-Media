@@ -1,48 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchGetNewsLent } from "../API";
+
+
+
 
 const newsSlice = createSlice({
-    name: "news",
-    initialState: [],
-    reducers: {
-
-      AddPost(state,{payload}){        
-        state.push(payload)
-      },
+  name: "news",
+  initialState: {
+    posts: []
+  },
+  reducers: {
+    AddPost: (state, {payload}) => {
       
-      EditableStatus(state, {payload}){
-        state.map((el)=>{
-          return el.id===payload.id ? el.isEditing=!el.isEditing : el
-        })
-      },
-
-      EditPost(state, {payload}){
-        state.map((e)=>{
-          if (e.id===payload.item.id) {
-            e.isEditing=!e.isEditing
-            return e.post = payload.value
-          }else return e
-        })
-      },
-
-      DeletePost(state, {payload}){
-        state.map((el,index)=> {
-         return el.id=== payload.id ? state.splice(index,1): el
-        })
+      state.posts.unshift(payload);
+    },
+    RemovePost: (state, action) => {
+      state.posts = state.posts.filter(post => post.id !== action.payload.id);
+    },
+    EditPost: (state, action) => {
+      const index = state.posts.findIndex(post => post.id === action.payload.id);
+      if (index !== -1) {
+        state.posts[index].content = action.payload.value;
       }
     },
-    extraReducers: (builder)=> {
-        builder.addCase(fetchGetNewsLent.pending, (state,{payload})=> {
-        } )
-        .addCase(fetchGetNewsLent.fulfilled,(state, {payload})=> {
-          state.push(...payload)
-        })
-        .addCase(fetchGetNewsLent.rejected, (state, {payload})=> {
-         alert("Pending Time Out")
-        })
-    }
-})
+  },
+});
 
-export const newsReducer = newsSlice.reducer
-export const {EditableStatus, AddPost, EditPost, DeletePost}= newsSlice.actions
-export const selectNews = (state)=>state.news
+export const { AddPost, RemovePost, EditPost } = newsSlice.actions;
+
+export const selectNews = (state) => state.news.posts;
+
+export const newsReducer = newsSlice.reducer;

@@ -1,54 +1,95 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../../../../store/slices/UserSlice";
-import {DeleteFriend} from "../../../../store/slices/UserSlice";
-import "./MyFriends.css";
+import React, { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { Toast } from 'primereact/toast';
+import { ProgressSpinner } from 'primereact/progressspinner';
+
+import "primereact/resources/themes/lara-light-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import UserCard from "./UserCard/UserCard";
+import { getToken } from "../../../../utils/auth";
 
 const MyFriends = () => {
-  const dispatch = useDispatch();
-  const {users } = useSelector(selectUser);
-  const profile = JSON.parse(localStorage.getItem("userProfile"))
+  const [friendList, setFriendList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const { ref, inView } = useInView();
+
+  const fetchFriends = async (pageNumber) => {
+    try {
+      const token = getToken()
+      const res = await fetch(`http://localhost:8000/api/friends/list?page=${pageNumber}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+      const data = await res.json();
+
+      
+      setFriendList(prev => [...prev, ...data.data]);
+      setHasMore(data.next_page_url !== null);
+    } catch (error) {
+      console.error("Failed to fetch friends:", error);
+    } finally {
+      setLoading(false);
+    }
+ 
+  };
+
+  useEffect(() => {
+    
+    fetchFriends(page);
+  }, [page]);
+
+  useEffect(() => {
+    if (inView && hasMore) {
+    setPage(prev => prev + 1);
+
+    }
+  }, [inView,hasMore]);
+
+  const handleDelete = async (userId) => {
+    try {
+      const token = getToken();
+      await fetch(`http://localhost:8000/api/friends/delete/${userId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      });
+
+      setFriendList(prev => prev.filter(u => u.id !== userId));
+    } catch (err) {
+      console.error("Error deleting friend", err);
+    }
+  };
 
   return (
-    <div className="friends-container">
-      <h3 className="friends-title">Friends List</h3>
-      <ul className="friends-list">
-      {
-        profile.friend_list.length === 0 ?
-        <div className="no-Friends">No Friends</div>
-        :
-          profile.friend_list.map(
-            (user) => (
-              <li key={user.id} className="friend-card">
-                <img className="friend-avatar" src={user.image} alt="" />
-                <div className="friend-info">
-                  <h4 className="friend-name">
-                    {user.first_name} {user.last_name}
-                  </h4>
-                  <p className="friend-detail">Age: {user.age}</p>
-                  <p className="friend-detail">Gender: {user.gender}</p>
-                  <button onClick={async ()=>{
-                    dispatch(DeleteFriend(user))
-                    const findUser = users.find((friend)=>friend.id===user.id)
-                    const newResultforLogedUser= {...profile, friend_list: profile?.friend_list.filter((friend)=>friend.id!==user?.id)}
-                    const newresultforDeletedUser = {...findUser, friend_list: findUser?.friend_list.filter((friend)=>friend.id!==profile?.id)  }
-                    await fetch ((`http://localhost:3005/Loged_User/${profile?.id}`) ,{
-                    method: "PUT",
-                    body: JSON.stringify(newResultforLogedUser)    
-                  })
-                    await fetch ((`http://localhost:3005/users_Data/${findUser?.id}`) ,{
-                    method: "PUT",
-                    body: JSON.stringify(newresultforDeletedUser) 
-                  })
-  
-                    }}
-                    >Delete</button>
-                </div>
-              </li>
-            )
-          )
-      }
-      </ul>
+    <div style={{ padding: "2rem" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "1rem" }}>Friends List</h2>
+
+      {friendList.length === 0 && !loading ? (
+        <p style={{ textAlign: "center" }}>No Friends</p>
+      ) : (
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+          {friendList.map((user) => (
+            <UserCard
+              key={user.id}
+              user={user}
+              onDelete={() => handleDelete(user.id)}
+            />
+          ))}
+          
+        </div>
+      )}
+      {hasMore && (
+            <div ref={ref} style={{ marginTop: "2rem" }}>
+              <ProgressSpinner />
+            </div>
+          )}
     </div>
   );
 };

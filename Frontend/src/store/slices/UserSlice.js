@@ -5,9 +5,12 @@ const UserSlice = createSlice({
   name: "user",
   initialState: {
     users: [],        
-    profile: null,    
+    profile: JSON.parse(localStorage.getItem("userProfile")) || JSON.parse(sessionStorage.getItem("userProfile")) || null,   
   },
   reducers: {
+    setUsers(state, { payload }) {
+      localStorage.setItem("users",JSON.stringify(payload))
+    },
     uploadPhoto: (state, { payload }) => {
       if (state.profile && Array.isArray(state.profile.Photo)) {
         state.profile.Photo.push(payload);
@@ -47,10 +50,7 @@ const UserSlice = createSlice({
     },
 
     AddFriend(state, { payload }) {
-      if (state.profile) {
-        state.profile.FriendList.push(payload);
-        state.profile.FriendRequest.splice(0, 1);
-      }
+      localStorage.setItem("token",JSON.stringify(payload))
     },
 
     RejectFriendRequest(state) {
@@ -71,12 +71,31 @@ const UserSlice = createSlice({
       state.profile = null;
       localStorage.removeItem("userProfile");
       localStorage.removeItem("token");
+      sessionStorage.removeItem("userProfile");
+      sessionStorage.removeItem("token");
     },
 
-    LogIn(state, { payload }) {
+    LogInLocal(state, { payload }) {
       state.profile = payload;
       localStorage.setItem("userProfile", JSON.stringify(payload));
     },
+    initProfileFromStorage(state) {
+      const profileFromLocal = localStorage.getItem("userProfile");
+      const profileFromSession = sessionStorage.getItem("userProfile");
+  
+      if (profileFromLocal) {
+        state.profile = JSON.parse(profileFromLocal);
+      } else if (profileFromSession) {
+        state.profile = JSON.parse(profileFromSession);
+      } else {
+        state.profile = null;
+      }
+    },  
+    LogInSession(state, { payload }) {
+      state.profile = payload;
+      sessionStorage.setItem("userProfile", JSON.stringify(payload));
+    },
+
 
     RegUser(state, { payload }) {
     },
@@ -84,25 +103,23 @@ const UserSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchGetUser.pending, (state) => {})
+      .addCase(fetchGetUser.pending, (state) => {
+        
+      })
       .addCase(fetchGetUser.fulfilled, (state, action) => {
         state.users = action.payload;
       })
       .addCase(fetchGetUser.rejected, (state) => {
         alert("Pending Time Out");
       })
-      .addCase(fetchGetLogedUser.pending, (state) => {})
-      .addCase(fetchGetLogedUser.fulfilled, (state, { payload }) => {
-        state.profile = payload;
-      })
-      .addCase(fetchGetLogedUser.rejected, (state) => {
-        alert("Error");
-      });
+      
   },
 });
 
 export const UserReducer = UserSlice.reducer;
 export const {
+  initProfileFromStorage,
+  setUsers,
   uploadPhoto,
   editedProfile,
   AddNewPhoto,
@@ -113,7 +130,8 @@ export const {
   DeleteFriend,
   RejectFriendRequest,
   LogOut,
-  LogIn,
+  LogInLocal,
+  LogInSession,
   RegUser,
 } = UserSlice.actions;
 

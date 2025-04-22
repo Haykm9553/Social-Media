@@ -1,98 +1,94 @@
-import { useDispatch, useSelector } from "react-redux";
-import "./UploadPhoto.css";
-import { AddNewPhoto, selectPhoto, selectUser } from "../../../../store/slices/UserSlice";
-
+import React, { useState } from "react";
+import { getToken } from "../../../../utils/auth";
 
 const UploadPhoto = () => {
-  const dispatch = useDispatch();
-  const {profile} = useSelector(selectUser)
-  const token = localStorage.getItem('token')
-  
+  const [photos, setPhotos] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
+    if (!file) {
+      console.log("No file selected");
+      return; 
+    }
+  
+    console.log("Selected file:", file); 
+  
     const formData = new FormData();
-    formData.append("photo", file);
-
+    formData.append("image", file);
+  
+    console.log("FormData:", formData);
+  
     try {
-      const response = await fetch("http://localhost:8000/api/upload-photo", {
-        headers: {
-          "Authorization": `Bearer ${token}`,
-        },
+      setLoading(true);
+      const response = await fetch("http://localhost:8000/api/photos", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          Accept: "application/json",
+        },
         body: formData,
       });
-
+  
       const data = await response.json();
-
-      if (response.ok) {
-        const newPhoto = { url: `http://localhost:8000${data.url}`, key: false, active: true };
-        dispatch(AddNewPhoto(newPhoto))
-        const updatedProfile = {
-          ...profile,
-          photo: [...(profile.photo || []), newPhoto],
-        };
-
-        if (profile?.id) {
-          await fetch(`http://localhost:8000/api/users/${profile.id}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json","Authorization": `Bearer ${token}`, },
-            body: JSON.stringify(updatedProfile),
-          });
-        } else {
-          console.warn("⚠️ Нет ID профиля. PATCH запрос не отправлен.");
-        }
-
-        dispatch(selectPhoto(updatedProfile.photo.length - 1));
+  
+      if (!response.ok) {
+        throw new Error(data.message || "Upload failed");
       }
+  
+      console.log("File uploaded:", data);
+  
+      const newPhoto = {
+        id: data.data.id,
+        url: data.data.url,
+        name: data.data.name,
+        size: data.data.size, 
+      };
+  
+      setPhotos((prev) => [...prev, newPhoto]);
     } catch (error) {
-      console.error("Ошибка при загрузке:", error);
+      console.error("Upload error:", error.message);
+      alert("Ошибка загрузки: " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+
+  const handleDeletePhoto = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/photos/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Delete failed");
+      }
+
+      setPhotos((prev) => prev.filter((photo) => photo.id !== id));
+    } catch (error) {
+      console.error("Delete error:", error.message);
+      alert("Ошибка удаления: " + error.message);
     }
   };
 
-  const handleDeletePhoto = async (index) => {
-    const newPhotos = profile.photo.filter((_, i) => i !== index);
-
-    const updatedProfile = {
-      ...profile,
-      photo: newPhotos,
-    };
-
-    await fetch(`http://localhost:8000/api/users/${profile.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json","Authorization": `Bearer ${token}`, },
-      body: JSON.stringify(updatedProfile),
-    });
-  };
-  console.log(profile);
-  
   return (
-    <div className="UploadPhoto">
-      <h2>Your Photos</h2>
+    <div className="upload-photo">
+      <h2>Загрузка фотографии</h2>
 
-      <div className="photo-gallery">
-        {profile?.photo?.length === 0 ? (
-          <p>No Photos</p>
-        ) : (
-          profile?.photo?.map((photo, index) => (
-            <div className="photo-item" key={index}>
-              <img src={photo.url} alt="UserPhoto" />
-              <div className="photo-actions">
-                <button onClick={() => dispatch(selectPhoto(index))}>
-                  Select
-                </button>
-                <button onClick={() => handleDeletePhoto(index)}>
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+      <input type="file" onChange={handleFileUpload} disabled={loading} />
 
-      <div className="upload-form">
-        <input type="file" onChange={handleFileUpload} />
-        <button>Upload</button>
+      {loading && <p>Загрузка...</p>}
+
+      <div className="photo-list" style={{ display: "flex", gap: "20px", marginTop: "20px", flexWrap: "wrap" }}>
+        {photos.map((photo) => (
+          <div key={photo.id} style={{ textAlign: "center" }}>
+            <img src={photo.url} alt={photo.name} width="150" style={{ borderRadius: "10px" }} />
+            <p>{photo.name}</p>
+            <button onClick={() => handleDeletePhoto(photo.id)}>Удалить</button>
+          </div>
+        ))}
       </div>
     </div>
   );

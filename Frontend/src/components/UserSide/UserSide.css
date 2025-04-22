@@ -1,4 +1,5 @@
 .UserSide {
+    margin-top: 60px;
     width: 300px;
     min-height: 100vh;
     display: flex;

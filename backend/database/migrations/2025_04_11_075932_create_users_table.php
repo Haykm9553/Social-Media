@@ -19,13 +19,10 @@ return new class extends Migration
             $table->string('password');
             $table->integer('age');
             $table->string('gender');
-            $table->boolean('is_editing');
             $table->string('location')->nullable();
             $table->text('bio')->nullable();
             $table->string('profession')->nullable();
-            $table->string('hobbies')->nullable();
-            $table->json('friend_request')->nullable();
-            $table->json('friend_list')->nullable();
+            $table->string('hobbies')->nullable();;
             $table->string('image');
             $table->json('photo')->nullable();
             $table->rememberToken();

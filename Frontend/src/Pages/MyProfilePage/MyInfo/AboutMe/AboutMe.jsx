@@ -6,14 +6,13 @@ import { setActiveSection } from '../../../../store/slices/SectionSlice/SectionS
 
 const AboutMe = () => {
   
-  const profile = JSON.parse(localStorage.getItem("userProfile"))
+  const profile = JSON.parse(localStorage.getItem("userProfile") || sessionStorage.getItem("userProfile"))
     const dispatch = useDispatch()
     const navigate =useNavigate()
     const goToSection = (section) => {
         dispatch(setActiveSection(section));
         navigate(`/profile/${profile.id}/info/${section.toLowerCase()}`);
       };
-    console.log(profile);
     
     return (
       <div className="info">

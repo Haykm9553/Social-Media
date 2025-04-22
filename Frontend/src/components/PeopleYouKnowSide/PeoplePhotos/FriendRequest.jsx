@@ -1,71 +1,104 @@
-import { useDispatch, useSelector } from 'react-redux'
+/* eslint-disable react-hooks/exhaustive-deps */
 import './FriendRequest.css'
-import { AddFriend, RejectFriendRequest, selectUser } from '../../../store/slices/UserSlice'
+import { useEffect, useState } from 'react'
+import { Paginator } from 'primereact/paginator'
+import { getToken } from '../../../utils/auth'
 
 const FriendRequest = () => {
-    const {User_Data, Loged_User_Data}= useSelector(selectUser)
-    const dispatch = useDispatch()
-    // const request = profile?.FriendRequest[0]?.fromUser
-    // const searchResult =User_Data.find((user)=>user.id===request?.id)
+  const profile = JSON.parse(localStorage.getItem("userProfile") || sessionStorage.getItem("userProfile"))
+  const token = getToken()
+
+  const [requestsData, setRequestsData] = useState({ data: [], current_page: 1, total: 0 });
+
+
+
+  const fetchRequests = async (page = 1) => {
+    const res = await fetch(`http://localhost:8000/api/friends/request?page=${page}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
+    });
+
+    const data = await res.json();
     
-    return (
-        <></>
-    )
+    setRequestsData(data);
+  };
+
+  useEffect(() => {
+    fetchRequests();
+  }, []);
+
+  const filteredRequest = requestsData.data?.filter(
+    (el) => el.from_user_id !== profile.id && el.status === "pending"
+  );
+
+  const handleAccept = async (id) => {
+    await fetch(`http://localhost:8000/api/friends/accept/${id}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      },
+    });
+    setRequestsData(prev => ({
+        ...prev,
+        data: prev.data.filter(r => r.id !== id),
+        total: prev.total - 1
+      }));
+      fetchRequests()
+  };
+
+  const handleReject = async (id) => {
+    await fetch(`http://localhost:8000/api/friends/decline/${id}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      },
+    });
+    setRequestsData(prev => ({
+        ...prev,
+        data: prev.data.filter(r => r.id !== id),
+        total: prev.total - 1
+      }));
+      fetchRequests()
+  };
+
+  
+
+  return (
+    <div className='FriendRequest'>
+      <h2>Friend Request</h2>
+      <div className="FriendRequestBody">
+        <div>You have a friend request [<span>{requestsData?.total}</span>]</div>
+        {
+          requestsData.data.length !== 0 ? requestsData.data.map((el, index) => (
+            <div key={index} className="person-card">
+              <img src={el.from_user?.image} alt="Icon" />
+              <p className="name">{el.from_user?.first_name} {el.from_user?.last_name}</p>
+              <button className='add-button' onClick={() => handleAccept(el.id)}>Accept</button>
+              <button className='add-button' onClick={() => handleReject(el.id)}>Reject</button>
+            </div>
+          )) : <p>No Friend Requests</p>
+        }
+      </div>
+
+      <div className="paginatorDiv">
+        {
+          requestsData?.total > 4 ? <Paginator
+          first={(requestsData.current_page - 1) * 4}
+          rows={4}
+          totalRecords={requestsData.total}
+          onPageChange={(e) => fetchRequests(e.page + 1)}
+          template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+        />
+        :
+        ''
+        }
+      </div>
+    </div>
+  )
 }
 
 export default FriendRequest
-
-
-/*{ <div className='FriendRequest'>
-            <h2>Friend Request</h2>
-            <div className="FriendRequestBody">
-                {
-                    profile?.FriendRequest?.length!==0 ?
-                    <div> You have a friend request [<span> {profile?.FriendRequest.length} </span>]
-                    <div  className="person-card">
-                <img src={request?.Image} alt="Icon" />
-                <p className="name">
-                  {request?.FirstName} {request?.LastName}
-                </p>
-                <button className='add-button'
-                onClick={
-                    async() =>  {
-                        dispatch(AddFriend(request))
-
-                        const newResultForLogedUser= {...profile, FriendRequest: profile?.FriendRequest.toSpliced(0,1), FriendList: [...profile?.FriendList, request] }
-
-                        const newResultForRequestUser= {...searchResult, FriendList: [...searchResult?.FriendList, {...profile, FriendRequest: profile?.FriendRequest.toSpliced(0,1)}]}
-
-                        await fetch ((`http://localhost:3005/Loged_User/${profile?.id}`),{
-                        method: "PUT",
-                        body: JSON.stringify(newResultForLogedUser)
-                      })
-                        await fetch ((`http://localhost:3005/users_Data/${searchResult?.id}`),{
-                        method: "PUT",
-                        body: JSON.stringify(newResultForRequestUser)
-                      })
-                    }
-                }
-                >
-                    Accept
-                    </button>
-                <button className='add-button'
-
-                onClick={async()=>{
-                    dispatch(RejectFriendRequest())
-                    const NewResult = {...profile, FriendRequest: profile?.FriendRequest.toSpliced(0,1)}
-                    await fetch ((`http://localhost:3005/Loged_User/${profile?.id}`),{
-                        method: "PUT",
-                        body: JSON.stringify(NewResult)
-                      })
-                }}
-                >
-                    Reject
-                    </button>
-                    </div>
-                    </div>
-                    :
-                     <p>You have no friend request</p>
-                }
-            </div>
-        </div> }*/

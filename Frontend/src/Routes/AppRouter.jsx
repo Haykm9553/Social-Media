@@ -16,7 +16,6 @@ import UploadPhoto from '../Pages/MyProfilePage/MyInfo/UploadPhoto/UploadPhoto'
 const AppRouter = () => {
 
     const { profile,users } = useSelector(selectUser);
-    console.log(users);
     
     return (
         <Routes>

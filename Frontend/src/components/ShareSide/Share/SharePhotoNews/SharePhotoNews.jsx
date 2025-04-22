@@ -7,7 +7,7 @@ import { selectUser } from '../../../../store/slices/UserSlice'
 const SharePhotoNews = () => {
     const dispatch = useDispatch()
     const [showImage, setShowImage]=useState(null)
-    const {Loged_User_Data} = useSelector(selectUser)
+    const profile = JSON.parse(localStorage.getItem("userProfile") || sessionStorage.getItem("userProfile"))
     const handlerChange =  (e)=> {
         const file = e.target.files[0]
         const reader = new FileReader() 

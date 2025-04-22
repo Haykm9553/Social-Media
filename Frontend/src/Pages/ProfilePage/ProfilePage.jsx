@@ -4,18 +4,22 @@ import ShareSide from '../../components/ShareSide/ShareSide'
 import PeopleYouKnowSide from '../../components/PeopleYouKnowSide/PeopleYouKnowSide'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-
+import { getToken } from '../../utils/auth';
 
 const ProfilePage = () => {
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
-  
-  
+
+  const token = getToken()
   useEffect(() => {
+
     const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.warn("No token found, redirecting to login");
+        navigate("/login"); 
+        return;
+      }
 
       try {
         const res = await fetch("http://localhost:8000/api/profile", {
@@ -32,25 +36,23 @@ const ProfilePage = () => {
 
         const userProfile = await res.json();
         setProfile(userProfile);
-        
       } catch (err) {
         console.error("Ошибка при загрузке профиля:", err);
+        navigate("/login");
       }
     };
 
     fetchProfile();
-  }, []);
-
-
+  }, [navigate]);
 
 
   return (
     <header className="ProfilePage">
-      <UserSide profile={profile} />
+      <UserSide profile={profile} token={token} />
       <ShareSide />
       <PeopleYouKnowSide />
     </header>
   );
 };
 
-export default ProfilePage
+export default ProfilePage;

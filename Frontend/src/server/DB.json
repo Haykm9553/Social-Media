@@ -38,6 +38,42 @@
     }
   ],
   "Loged_User": [],
-  "News_Lent": [],
+  "News_Lent": [
+    {
+      "id": "1744984168485",
+      "content": "asfasf",
+      "isEditing": false,
+      "Image": "",
+      "userId": 2
+    },
+    {
+      "id": "1744984174012",
+      "content": "asfsafsaf",
+      "isEditing": false,
+      "Image": "",
+      "userId": 2
+    },
+    {
+      "id": "1744984218990",
+      "content": "sfsafasfsa",
+      "isEditing": false,
+      "Image": "",
+      "userId": 2
+    },
+    {
+      "id": "1744984416428",
+      "content": "fasfsfas",
+      "isEditing": false,
+      "Image": "",
+      "userId": 2
+    },
+    {
+      "id": "1744985712262",
+      "content": "adsfasdfsaf",
+      "isEditing": false,
+      "Image": "",
+      "userId": 104
+    }
+  ],
   "Messages": []
 }

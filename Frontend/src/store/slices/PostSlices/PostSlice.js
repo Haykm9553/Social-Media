@@ -13,18 +13,7 @@ const postSlice = createSlice({
       },          
     }
 })
-export const selectSideContent = (state) => {
-  const {activeSide} = state.post;
- 
-  switch(activeSide){
-  case "SharePost":
-    return <SharedPost/>
-    case "SharePhoto":
-      return <SharePhotoNews/>
-        default: 
-        return <p> Select Side</p> 
-  }
-}
+export const selectActiveSide = (state) => state.post.activeSide;
 
 export const {setActiveSide } = postSlice.actions
 export const postReducer = postSlice.reducer

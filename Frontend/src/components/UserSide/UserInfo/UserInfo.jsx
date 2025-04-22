@@ -1,6 +1,6 @@
 import "./UserInfo.css";
 import { NavLink } from "react-router-dom";
-const UserInfo = ({profile}) => {
+const UserInfo = ({profile,token}) => {
   
   const FindImage = profile?.Photo?.map((el) => {
     if(el.key){

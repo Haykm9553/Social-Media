@@ -1,16 +1,26 @@
 .NavBar{
+  position: fixed;
   width: 100%;
   height: 60px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   background-color: #1d3039;
+  z-index: 1;
 
 }
 
 .JobSide > ul {
   display: flex;
   gap: 20px;
+  justify-content: start;
+  align-items: center;
+  height: 40px;
+
+  .liImg{
+    align-self: flex-start;
+    margin-top: 7px;
+  }
 
   li {
     list-style: none;
