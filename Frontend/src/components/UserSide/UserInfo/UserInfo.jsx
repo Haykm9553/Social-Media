@@ -1,14 +1,10 @@
 import "./UserInfo.css";
 import { NavLink } from "react-router-dom";
-const UserInfo = ({profile,token}) => {
+const UserInfo = () => {
+
+  const profile = JSON.parse(localStorage.getItem("userProfile") || sessionStorage.getItem("userProfile"))
   
-  const FindImage = profile?.Photo?.map((el) => {
-    if(el.key){
-      return el.url
-    } else {
-      return ""
-    }
-  });
+
   
   
   return (
@@ -33,7 +29,7 @@ const UserInfo = ({profile,token}) => {
         </div>
       </div>
       <div className="ViewProfile">
-        <NavLink to={`/profile/${profile?.id}/info`}>View my profile</NavLink>
+        <NavLink to={`/profile/${profile?.id}/info`} state={{ profile }}>View my profile</NavLink>
       </div>
     </article>
   );

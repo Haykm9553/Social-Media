@@ -2,14 +2,14 @@
 import './FriendRequest.css'
 import { useEffect, useState } from 'react'
 import { Paginator } from 'primereact/paginator'
-import { getToken } from '../../../utils/auth'
+import { getToken} from '../../../utils/auth'
+import { useNavigate } from 'react-router-dom'
 
 const FriendRequest = () => {
   const profile = JSON.parse(localStorage.getItem("userProfile") || sessionStorage.getItem("userProfile"))
   const token = getToken()
-
+  const navigate = useNavigate()
   const [requestsData, setRequestsData] = useState({ data: [], current_page: 1, total: 0 });
-
 
 
   const fetchRequests = async (page = 1) => {
@@ -29,11 +29,10 @@ const FriendRequest = () => {
     fetchRequests();
   }, []);
 
-  const filteredRequest = requestsData.data?.filter(
-    (el) => el.from_user_id !== profile.id && el.status === "pending"
-  );
+
 
   const handleAccept = async (id) => {
+    
     await fetch(`http://localhost:8000/api/friends/accept/${id}`, {
       method: 'POST',
       headers: {
@@ -60,7 +59,7 @@ const FriendRequest = () => {
     setRequestsData(prev => ({
         ...prev,
         data: prev.data.filter(r => r.id !== id),
-        total: prev.total - 1
+        total: prev.total_items - 1
       }));
       fetchRequests()
   };
@@ -71,12 +70,20 @@ const FriendRequest = () => {
     <div className='FriendRequest'>
       <h2>Friend Request</h2>
       <div className="FriendRequestBody">
-        <div>You have a friend request [<span>{requestsData?.total}</span>]</div>
+        <div>You have a friend request [<span>{requestsData?.meta?.total_items}</span>]</div>
         {
           requestsData.data.length !== 0 ? requestsData.data.map((el, index) => (
             <div key={index} className="person-card">
-              <img src={el.from_user?.image} alt="Icon" />
-              <p className="name">{el.from_user?.first_name} {el.from_user?.last_name}</p>
+              <img 
+              src={el?.image} 
+              alt="Icon"
+              onClick={()=>{
+                navigate(`/profile/${el?.id}/info`, {
+                  state: {profile:el}
+                })
+              }}  
+              />
+              <p className="name">{el.first_name} {el.last_name}</p>
               <button className='add-button' onClick={() => handleAccept(el.id)}>Accept</button>
               <button className='add-button' onClick={() => handleReject(el.id)}>Reject</button>
             </div>
@@ -86,10 +93,10 @@ const FriendRequest = () => {
 
       <div className="paginatorDiv">
         {
-          requestsData?.total > 4 ? <Paginator
-          first={(requestsData.current_page - 1) * 4}
+          requestsData?.meta?.total_items > 4 ? <Paginator
+          first={(requestsData.meta?.current_page - 1) * 4}
           rows={4}
-          totalRecords={requestsData.total}
+          totalRecords={requestsData.meta.total_items}
           onPageChange={(e) => fetchRequests(e.page + 1)}
           template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
         />

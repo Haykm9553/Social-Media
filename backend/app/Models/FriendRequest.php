@@ -15,7 +15,10 @@ class FriendRequest extends Model
         'to_user_id',
         'status',
     ];
-
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'friend_requests', 'user_id', 'friend_id');
+    }
 
     public function fromUser()
 {

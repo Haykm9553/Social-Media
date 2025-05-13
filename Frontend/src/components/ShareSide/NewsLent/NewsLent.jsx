@@ -37,7 +37,6 @@ const NewsLent = () => {
       );
 
       const data = await res.json();
-      console.log(data);
       
       if (!data.next_page_url || data.data.length === 0) {
         setHasMore(false);

@@ -38,9 +38,9 @@ const RegPage = ({ profile, users }) => {
       friend_list: [],
       image:
         gender === "Man"
-          ? "http://localhost:8000/storage/Image/Man-Photo.webp"
-          : "http://localhost:8000/storage/Image/Woman-Photo.png",
-      photo: [],
+          ? "Image/Man-Photo.webp"
+          : "Image/Woman-Photo.png",
+      
     };
 
     if (Pass.value !== RepeatPass.value) {

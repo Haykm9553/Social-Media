@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from '../components/NavBar/NavBar'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { getToken } from '../utils/auth';
 
-const Layout = ({profile}) => {
+const Layout = () => {
+
+   
+      
     return (
         <div className='App'>
-            <NavBar profile={profile}/>
+            <NavBar/>
             <Outlet/>
         </div>
     )

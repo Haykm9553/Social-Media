@@ -28,12 +28,7 @@ const UserSlice = createSlice({
     },
 
     selectPhoto(state, { payload }) {
-      if (state.profile && state.profile.photo) {
-        state.profile.photo[payload] = {
-          ...state.profile.photo[payload],
-          active: !state.profile.photo[payload].active,
-        };
-      }
+      return {...payload,active:true}
     },
 
     deletePhoto(state, { payload }) {
@@ -43,9 +38,13 @@ const UserSlice = createSlice({
     },
 
     SelectPhotoToMain(state, { payload }) {
-      if (state.profile && state.profile.photo) {
-        state.profile.photo[payload].key = true;
-        state.profile.photo[payload].active = false;
+      if (state.profile) {
+        state.profile.image = payload; 
+        if(JSON.parse(localStorage.getItem("userProfile"))){
+          localStorage.setItem("userProfile", JSON.stringify(state.profile));
+        } else {
+          sessionStorage.setItem("userProfile", JSON.stringify(state.profile));
+        }
       }
     },
 

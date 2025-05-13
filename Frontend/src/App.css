@@ -5,3 +5,6 @@
   font-family: Arial, Helvetica, sans-serif
 }
 
+body.no-scroll {
+  overflow: hidden;
+}

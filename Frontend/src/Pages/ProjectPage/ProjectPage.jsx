@@ -16,6 +16,7 @@ const ProjectPage = () => {
           <p onClick={() => dispatch(setProjectSection("UserTable"))}>
             User Table
           </p>
+          <p onClick={() => dispatch(setProjectSection("Elevator"))}>Elevator Js</p>
         </div>
       </aside>
       <div className="Projects">{projectContent}</div>

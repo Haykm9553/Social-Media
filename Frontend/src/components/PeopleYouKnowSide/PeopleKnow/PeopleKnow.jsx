@@ -46,6 +46,7 @@ const PeopleKnow = () => {
   const fetchUsers = async (page = 1) => {
     try {
       const data = await fetchWithAuth(`http://localhost:8000/api/people-you-might-know?page=${page}`);
+      
       setUsersData(data);
     } catch (error) {
       console.error("Ошибка при получении пользователей:", error);
@@ -85,7 +86,7 @@ const PeopleKnow = () => {
       <div className="AllPeople">
         {usersData.data.map((user) => (
           <div key={user.id} className="person-card">
-            <img src={user.image} alt="Icon" />
+            <img src={user?.image} alt="Icon" />
             <p className="name">
               {user.first_name} {user.last_name}
             </p>
@@ -101,12 +102,12 @@ const PeopleKnow = () => {
 
       <div className="paginatorDiv">
         {
-          usersData?.total > 4 
+          usersData?.meta?.total > 4 
           ?
           <Paginator
-          first={(usersData.current_page - 1) * 10}
+          first={(usersData.meta.current_page - 1) * 10}
           rows={10}
-          totalRecords={usersData.total}
+          totalRecords={usersData.meta.total}
           onPageChange={(e) => {
             const newPage = e.page + 1;
             fetchUsers(newPage);

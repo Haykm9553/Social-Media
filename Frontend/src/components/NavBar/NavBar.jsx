@@ -8,10 +8,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { getToken } from "../../utils/auth";
 const NavBar = () => {
   const navigate = useNavigate();
-  const {profile} = useSelector(selectUser);
   const dispatch = useDispatch();
+  const profile = JSON.parse(localStorage.getItem("userProfile") || sessionStorage.getItem("userProfile"))
   
   const logOut = () => {
+
 
     const token = getToken()
     fetch('http://localhost:8000/api/logout', {
@@ -29,13 +30,7 @@ const NavBar = () => {
       navigate("/Login")
   };
   
-  const FindImage = profile?.Photo?.map((el) => {
-    if(el.key){
-      return el.url
-    } else {
-      return ''
-    }
-  });
+  
   return (
     <nav className="NavBar">
       <div className="LogoSide">
@@ -56,14 +51,21 @@ const NavBar = () => {
         <ul>
 
           <li><NavLink to={"/profile/pages"}>Pages</NavLink></li>
-          <li>
+          <li style={{cursor: 'pointer'}} onClick={() => {
+            navigate(`/profile/${profile.id}/messages`)
+          }}>
             <ChatLogo />
           </li>
           <li>
             <NotificationLogo />
           </li>
           <li className="liImg">
-            <img src={profile?.image} alt="" />
+            <img 
+            src={profile?.image} 
+            alt=""
+            onClick={() => navigate(`/profile/${profile.id}/info`)}
+            />
+            
           </li>
          
           <li className="LogOut" onClick={logOut}>

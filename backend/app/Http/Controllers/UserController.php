@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Collections\PeopleKnowCollection;
+use App\Http\Resources\PeopleKnowResource;
+use App\Models\Chat;
 use App\Models\FriendRequest;
+use App\Models\UploadPhoto;
 use Illuminate\Support\Facades\File;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +16,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
+
 
 class UserController extends Controller
 {
@@ -43,7 +49,6 @@ class UserController extends Controller
 
         $validated = $validator->validated();
         $validated['password'] = Hash::make($validated['password']);
-        $validated['photo'] = [];
 
         $user = User::create($validated);
         Auth::login($user);
@@ -82,7 +87,10 @@ class UserController extends Controller
 
     $user = Auth::user();
     $token = $user->createToken('auth_token')->plainTextToken;
-
+    if ($user->image) {
+        $cleanPath = Str::replaceFirst('storage/', '', $user->image);
+        $user->image = asset('storage/' . $cleanPath);
+    }
     return response()->json([
         'message' => 'Login successful',
         'user' => $user,
@@ -90,31 +98,44 @@ class UserController extends Controller
     ]);
 }
 
-    public function peopleYouMightKnow(Request $request)
+public function profile(Request $request)
 {
+    $user = $request->user();
 
+    if ($user->image) {
+        if (!Str::startsWith($user->image, ['http://', 'https://'])) {
+            $user->image = asset($user->image);
+        }
+    }
+
+
+    return response()->json($user);
+}
+
+public function peopleYouMightKnow(Request $request)
+{
     $currentUserId = Auth::id();
 
     $sentRequestUserIds = FriendRequest::where('from_user_id', $currentUserId)
-        ->orWhere('to_user_id', $currentUserId)
-        ->orWhere('status',  'pending')
         ->pluck('to_user_id')
         ->toArray();
-        
-        $receivedRequestUserIds = FriendRequest::where('to_user_id', $currentUserId)
+
+    $receivedRequestUserIds = FriendRequest::where('to_user_id', $currentUserId)
         ->pluck('from_user_id')
         ->toArray();
-        $excludeIds = array_merge([$currentUserId], $sentRequestUserIds,$receivedRequestUserIds);
-        $users = User::whereNotIn('id', $excludeIds)->paginate(4);
 
+    $excludeIds = array_merge([$currentUserId], $sentRequestUserIds, $receivedRequestUserIds);
 
-    return response()->json($users);
+    $paginatedUsers = User::whereNotIn('id', $excludeIds)->paginate(4);
+
+    return PeopleKnowResource::collection($paginatedUsers);
 }
 
     public function index()
     {
-        $users = User::all();
+        $users = User::find(1);
 
+        $chats = Chat::find(1);
         return response()->json($users);
 
     }
@@ -124,7 +145,11 @@ class UserController extends Controller
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
-
+        if ($user->image) {
+            if (!Str::startsWith($user->image, ['http://', 'https://'])) {
+                $user->image = asset('storage/' . $user->image);
+            }
+        }
         return response()->json($user);
     }
 
@@ -170,18 +195,7 @@ public function upload(Request $request,$id)
     return response()->json($user);
 }
 
-public function uploadPhoto(Request $request)
-{
-    $request->validate([
-        'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
 
-    $path = $request->file('photo')->store('public/Image');
-
-    $url = Storage::url($path);
-
-    return response()->json(['url' => $url]);
-}
 public function sendFriendRequest($id)
 {
     $fromUser = Auth::user();
@@ -191,10 +205,6 @@ public function sendFriendRequest($id)
         return response()->json(['message' => 'You cannot send a friend request to yourself'], 400);
     }
 
-    // Check if already friends
-    // if ($fromUser->friends()->where('friend_id', $toUser->id)->exists()) {
-    //     return response()->json(['message' => 'Already friends'], 400);
-    // }
 
 
     FriendRequest::create([
@@ -204,5 +214,41 @@ public function sendFriendRequest($id)
 
     return response()->json(['message' => 'Friend request sent']);
 }
+
+
+
+public function setMainPhoto(Request $request)
+{
+    $request->validate([
+        'photo_id' => 'required|exists:upload_photos,id',
+    ]);
+
+    $user = Auth::user();
+    $photo = UploadPhoto::findOrFail($request->photo_id);
+
+    if ($photo->user_id !== $user->id) {
+        return response()->json([
+            'error' => 'Unauthorized action: You can only set your own photos as the main one.'
+        ], 403);
+    }
+
+    if ($user->image === $photo->url) {
+        $defaultImage = $user->gender === 'Man'
+            ? 'Image/Man-Photo.webp'
+            : 'Image/Woman-Photo.png';
+
+        $user->image = $defaultImage;
+    } else {
+        $user->image = $photo->path;
+    }
+
+    $user->save();
+
+    return response()->json([
+        'message' => 'Main photo updated successfully.',
+        'image' => $photo->path,
+    ]);
+}
+
 
 }

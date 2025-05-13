@@ -2,9 +2,9 @@ import ProfileViews from './ProfileViews/ProfileViews'
 import UserInfo from './UserInfo/UserInfo'
 import './UserSide.css'
 
-const UserSide = ({ profile,token }) => (
+const UserSide = () => (
   <section className="UserSide">
-    <UserInfo profile={profile} token={token} />
+    <UserInfo  />
     <ProfileViews />
   </section>
 );

@@ -8,8 +8,8 @@
     background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6);
 }
 .AsideBar {
+    margin-top: 60px;
     width: 300px;
-    min-height: 100vh;
     text-align: center;
     display: flex;
 

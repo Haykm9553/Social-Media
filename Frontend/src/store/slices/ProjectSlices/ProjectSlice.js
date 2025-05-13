@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import ToDoList from "../../../Pages/ProjectPage/ToDoList/ToDoList";
 import UserTable from "../../../Pages/ProjectPage/UserTable/UserTable";
+import Elevator from "../../../Pages/ProjectPage/Elevator/Elevator";
 
 const ProjectSlice = createSlice({
     name: "project",
@@ -45,6 +46,8 @@ const ProjectSlice = createSlice({
         return <ToDoList/>
         case "UserTable":
           return <UserTable/>
+          case "Elevator":
+          return <Elevator/>
       default: return <div className="SelectProject"><p >Select Project</p></div>
     }
   };

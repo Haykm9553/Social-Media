@@ -5,11 +5,12 @@ import PeopleYouKnowSide from '../../components/PeopleYouKnowSide/PeopleYouKnowS
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from '../../utils/auth';
+import { useDispatch } from 'react-redux';
 
 const ProfilePage = () => {
+ 
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
-
   const token = getToken()
   useEffect(() => {
 
@@ -17,7 +18,7 @@ const ProfilePage = () => {
 
       if (!token) {
         console.warn("No token found, redirecting to login");
-        navigate("/login"); 
+        navigate("/"); 
         return;
       }
 
@@ -43,12 +44,13 @@ const ProfilePage = () => {
     };
 
     fetchProfile();
+    
   }, [navigate]);
 
 
   return (
     <header className="ProfilePage">
-      <UserSide profile={profile} token={token} />
+      <UserSide />
       <ShareSide />
       <PeopleYouKnowSide />
     </header>

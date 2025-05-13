@@ -33,6 +33,9 @@
             font-size: 14px;
 
         }
+        img {
+            cursor: pointer;
+        }
         button{
             width: 70px;
             height: 30px;

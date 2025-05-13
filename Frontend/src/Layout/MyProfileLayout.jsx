@@ -1,30 +1,48 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from '../components/NavBar/NavBar'
-import { Outlet, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import MyProfilePage from '../Pages/MyProfilePage/MyProfilePage'
 import { useDispatch } from 'react-redux';
 import { setActiveSection } from '../store/slices/SectionSlice/SectionSlice';
+import AboutMe from '../Pages/MyProfilePage/MyInfo/AboutMe/AboutMe';
+import MyFriends from '../Pages/MyProfilePage/MyInfo/MyFriends/MyFriends';
+import UploadPhoto from '../Pages/MyProfilePage/MyInfo/UploadPhoto/UploadPhoto';
 
 export default function MyProfileLayout() {
   const { id } = useParams(); 
-const profile = JSON.parse(localStorage.getItem("userProfile") || sessionStorage.getItem("userProfile"))
+  const [profile,setProfile] = useState([]);
 
+  const getUser = async () => {
+    const res = await fetch(`http://localhost:8000/api/users/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      }
+    });
+  
+    const data = await res.json();
+    setProfile(data)
+    
+  }
+  
 
+useEffect(() => {
+  getUser()
+},[])
 
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  //  const FindImage = singleData[0]?.Photo?.map((el) => {
-  //  return el.key ? el.url : ""
-    
-  // });
+
   const goToSection = (section) => {
     dispatch(setActiveSection(section));
-    navigate(`/profile/${id}/${section.toLowerCase()}`);
+    navigate(`/profile/${id}/${section.toLowerCase()}`, {
+      state: {profile}
+    });
   };
   return (
     <div className='App'>
-        <NavBar/>
+        <NavBar profile={profile}/>
         
     <div className="MyProfilePage">
      {
@@ -66,11 +84,12 @@ const profile = JSON.parse(localStorage.getItem("userProfile") || sessionStorage
             >
               Photo
             </button>
-            
+
+           
           </nav>
     
           <div className="section-content" >
-          <Outlet />
+          <Outlet/>
           </div>
             </div>
 

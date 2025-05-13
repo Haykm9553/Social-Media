@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('profession')->nullable();
             $table->string('hobbies')->nullable();;
             $table->string('image');
-            $table->json('photo')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

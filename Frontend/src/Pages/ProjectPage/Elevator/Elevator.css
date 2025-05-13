@@ -1,0 +1,57 @@
+.ElevatorMain {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  background: linear-gradient(to right, #3b8d99, #6b6b83, #aa4b6b);
+}
+
+.Elevator {
+  display: flex;
+  justify-content: space-around;
+  align-items: end;
+  gap: 25px;
+  width: 50%;
+  height: 100%;
+  border: 1px solid black;
+}
+
+.Elevator > div {
+  position: relative;
+  width: 150px;
+  height: 40px;
+  background-color: gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 2s ease-in-out;
+  cursor: pointer;
+}
+
+.Floor {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid black;
+}
+
+.UserFloor {
+  width: 150px;
+  height: 40px;
+  background-color: lightblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid black;
+}
+
+.UserFloor:hover {
+  background-color: deepskyblue;
+}

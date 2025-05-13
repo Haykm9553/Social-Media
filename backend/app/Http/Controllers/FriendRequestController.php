@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Collections\FriendRequestCollection;
 use App\Models\FriendList;
 use App\Models\FriendRequest;
 use App\Models\User;
@@ -11,28 +12,41 @@ use Illuminate\Support\Facades\Auth;
 class FriendRequestController extends Controller
 {
     public function index()
+    {
+        $userId = Auth::id();
+        $friends = FriendRequest::where(function ($query) use ($userId) {
+            $query->where('to_user_id', $userId);
+
+        })
+        ->where('status', 'pending')
+        ->with(['fromUser', 'toUser']);
+        $paginatedUsers = $friends->paginate(4);
+        $collection = new FriendRequestCollection($paginatedUsers);
+        return response()->json($collection->withPagination($paginatedUsers));
+    }
+
+
+public function getRequest(Request $request)
 {
-    $user = Auth::user();
-    $requests = FriendRequest::where('to_user', $user)->with('fromUser')->get();
-
-    return response()->json($requests);
-}
-
-public function friendRequest(){
-
-    
-}
-public function getRequest(Request $request){
-
     $currentUserId = Auth::id();
 
     $friendRequests = FriendRequest::where('to_user_id', $currentUserId)
-    ->where('status', 'pending')
-    ->with('fromUser')
-    ->paginate(4);
+        ->where('status', 'pending')
+        ->with('fromUser')
+        ->paginate(4);
 
-     return response()->json($friendRequests);
+    $friendRequests->getCollection()->transform(function ($friendRequest) {
+        if ($friendRequest->fromUser && $friendRequest->fromUser->image) {
+            if (strpos($friendRequest->fromUser->image, 'http') === false) {
+                $friendRequest->fromUser->image = asset('storage/' . ltrim($friendRequest->fromUser->image, '/'));
+            }
+        }
+        return $friendRequest;
+    });
+
+    return response()->json($friendRequests);
 }
+
 public function sentRequests(Request $request)
 {
     $user = Auth::user();
@@ -54,25 +68,24 @@ public function sentRequests(Request $request)
     return response()->json($users);
 }
 
-    public function accept($requestId)
-    {
-        $request = FriendRequest::findOrFail($requestId);
+public function accept($userId)
+{
+    $request = FriendRequest::where('from_user_id', $userId)
+        ->where('to_user_id', Auth::id())
+        ->where('status', 'pending')
+        ->firstOrFail();
 
-        if ($request->to_user_id !== Auth::id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+    $request->update(['status' => 'accepted']);
 
-        $request->update(['status' => 'accepted']);
-        $request->save();
+    FriendList::firstOrCreate([
+        'user_id' => $request->to_user_id,
+        'friend_id' => $request->from_user_id,
+    ]);
 
-        FriendList::create([
-            'user_id' =>$request->to_user_id,
-            'friend_id' =>$request->from_user_id,
 
-        ]);
 
-        return response()->json(['message' => 'Friend request accepted']);
-    }
+    return response()->json(['message' => 'Friend request accepted']);
+}
 
     public function decline($requestId)
     {

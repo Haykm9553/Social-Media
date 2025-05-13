@@ -20,6 +20,7 @@
   .liImg{
     align-self: flex-start;
     margin-top: 7px;
+    cursor: pointer;
   }
 
   li {
