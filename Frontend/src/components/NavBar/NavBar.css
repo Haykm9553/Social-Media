@@ -1,0 +1,70 @@
+.NavBar{
+  position: fixed;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #1d3039;
+  z-index: 1;
+
+}
+
+.JobSide > ul {
+  display: flex;
+  gap: 20px;
+  justify-content: start;
+  align-items: center;
+  height: 40px;
+
+  .liImg{
+    align-self: flex-start;
+    margin-top: 7px;
+    cursor: pointer;
+  }
+
+  li {
+    list-style: none;
+    color: white;
+    height: 20px;
+
+
+    img {
+        width: 30px;
+        height: 30px;
+        border-radius: 24px;
+    }
+
+
+    a {
+      text-decoration: none;
+      color: white;
+    }
+    .active {
+      color: #c4c0c0;
+    }
+  }
+}
+
+.LogoSide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  input {
+    width: 230px;
+    padding: 7px;
+    height: 30px;
+    background-color: #121F26;
+    border: none;
+  }
+}
+.LogOut {
+  cursor: pointer;
+}

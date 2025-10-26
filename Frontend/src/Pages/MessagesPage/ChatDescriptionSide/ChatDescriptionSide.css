@@ -1,0 +1,106 @@
+
+
+.ChatDescriptionSide {
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 60px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  gap: 20px;
+  overflow-y: auto;
+}
+.Protection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  border: none;
+  height: 20px;
+  width: 160px;
+  background-color: #e2e5e9;
+  border-radius: 24px;
+  cursor: pointer;
+  i {
+    width: 20px;
+
+  }
+  b {
+    font-size: 12px;
+    font-weight: bolder;
+  }
+}
+
+.Protection:hover {
+  background-color: #ccd0d5;
+}
+.ChatDescriptionSide h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.FriendInfo {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+
+
+}
+.FriendInfoChild {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.DescriptionImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.FriendInfoChild  {
+  flex: 1;
+}
+
+.FriendInfo h3 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.FriendInfo p {
+  font-size: 14px;
+  color: #555;
+}
+.FriendInfoButtons {
+  display: flex;
+  gap: 25px;
+
+  i {
+    background-color: #e2e5e9;
+    border-radius: 50%;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    span {
+      font-size: 14px;
+    }
+  }
+
+  i:hover {
+  background-color: #ccd0d5;
+
+  }
+}

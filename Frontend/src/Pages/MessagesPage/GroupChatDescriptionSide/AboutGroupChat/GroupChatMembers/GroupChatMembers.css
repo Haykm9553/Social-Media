@@ -1,0 +1,36 @@
+.GroupChatMembers {
+  min-height: 160px;
+  width: 100%;
+  .OpenedChatInfo {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+
+    p {
+      font-size: 14px;
+    }
+  }
+}
+.GroupChatMembers > .allGroupChatMembers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  gap: 10px;
+  img {
+    width: 30px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
+
+  div {
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    height: 40px;
+    justify-content: start;
+    cursor: pointer;
+  }
+}

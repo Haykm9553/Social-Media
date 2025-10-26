@@ -1,0 +1,105 @@
+
+
+.GroupChatDescriptionSide {
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  width: 500px;
+  overflow-y: auto;
+}
+
+.GroupChatDescriptionSide h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.ParticipantsInfo {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+
+
+}
+
+.GroupChatDescriptionImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+
+
+.ParticipantsInfo h3 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.ParticipantsInfo p {
+  font-size: 14px;
+  color: #555;
+}
+.ParticipantsBar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  gap: 10px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.ParticipantsBar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.ParticipantsName {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ParticipantsNameFirstDiv {
+  display: flex;
+  gap: 5px;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+  }
+}
+.GroupChatButtons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  align-items: center;
+
+  div {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+  i {
+    background-color: #e2e5e9;
+    border-radius: 50%;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,216 @@
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.UploadPhoto {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  padding: 40px 0;
+  min-height: 100vh;
+}
+
+.UploadPhoto form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.UploadPhoto button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  background-color: #ff7b54;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.UploadPhoto button:hover {
+  background-color: #ff5733;
+}
+
+.MyPhotos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  border-radius: 12px;
+}
+
+.MyPhotos > div {
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.MyPhotos > div:hover {
+  transform: scale(1.05);
+}
+
+.MyPhotos img {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.Selected-Photo {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeInScale 0.3s ease forwards;
+}
+
+.Selected-Image {
+  background: linear-gradient(to right, #ff9770, #ff6b6b);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 600px;
+  max-width: 90%;
+  padding: 20px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: fadeInScale 0.3s ease forwards;
+}
+
+.Selected-Image img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 16px;
+}
+
+.Selected-Image > div:first-child {
+  width: 100%;
+  text-align: right;
+}
+
+.Selected-Image i {
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+}
+
+.Selected-Image-Buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.Selected-Image-Buttons button {
+  padding: 10px 20px;
+  background-color: white;
+  color: #ff6b6b;
+  border: 2px solid #ff6b6b;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.Selected-Image-Buttons button:hover {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+/* 📱 Адаптивность под мобильные */
+@media (max-width: 600px) {
+  .MyPhotos {
+    justify-content: center;
+  }
+
+  .MyPhotos img {
+    width: 80px;
+  }
+
+  .UploadPhoto form {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .UploadPhoto button {
+    width: 100%;
+  }
+
+  .Selected-Image {
+    width: 95%;
+    height: auto;
+  }
+
+  .Selected-Image img {
+    width: 100%;
+  }
+}
+.upload-form {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #0083b0, #00b4db);
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  user-select: none;
+}
+
+.custom-file-upload:hover {
+  background: linear-gradient(135deg, #00b4db, #0083b0);
+  transform: scale(1.03);
+}
+
+.custom-file-upload input[type="file"] {
+  display: none;
+}
+
+.upload-form button {
+  padding: 10px 20px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.upload-form button:hover {
+  background: #555;
+}
